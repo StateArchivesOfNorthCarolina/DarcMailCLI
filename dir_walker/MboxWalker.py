@@ -137,6 +137,8 @@ class MboxWalker:
     def _transform_buffer(self, buff, path):
         try:
             mes = email.message_from_bytes(b''.join(buff))  # type: Message
+            if mes.get("Message-ID") == "":
+                print("")
             self.logger.info("Processing Message-ID {}".format(mes.get("Message-ID")))
             self._process_message(mes, path)
             self.total_messages_processed += 1
