@@ -39,11 +39,22 @@ _timezones = {'UT':0, 'UTC':0, 'GMT':0, 'Z':0,
               }
 
 
-
 class CommonMethods:
     globals()["__STITCH__"] = False
     globals()["__STOREJSON__"] = False
     empties = ['', None, []]
+    PACK_TYPE_MBOX = 0
+    PACK_TYPE_EML = 1
+
+    @staticmethod
+    def set_package_type(pt: int):
+        globals()["__PACK_TYPE__"] = pt
+
+    @staticmethod
+    def is_eml_struct() -> bool:
+        if globals()["__PACK_TYPE__"] == CommonMethods.PACK_TYPE_EML:
+            return True
+        return False
 
     @staticmethod
     def init_hash_dict():
@@ -229,7 +240,10 @@ class CommonMethods:
                 mime = content_type.split(";")
                 key, value = re.split("=", mime[1], maxsplit=1)
             except ValueError as ve:
-                raise
+                if mime[1] == "":
+                    return [content_type]
+                else:
+                    raise
             return [mime[0], key.strip(), value.strip("\"")]
         else:
             # is only a mime type

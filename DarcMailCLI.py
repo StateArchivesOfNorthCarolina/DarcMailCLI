@@ -338,10 +338,13 @@ class BuildEmlDarcmail(object):
 
 if __name__ == "__main__":
     dmcli = DarcMailCLI()
+
     if dmcli.eml_struct:
+        CommonMethods.set_package_type(CommonMethods.PACK_TYPE_EML)
         beml = BuildEmlDarcmail(dmcli)
         exit()
 
+    CommonMethods.set_package_type(CommonMethods.PACK_TYPE_MBOX)
     if dmcli.validate():
         start = timer()
         dmcli.convert()
