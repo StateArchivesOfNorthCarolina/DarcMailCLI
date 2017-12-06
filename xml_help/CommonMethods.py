@@ -51,7 +51,11 @@ class CommonMethods:
 
     @staticmethod
     def set_chunk_size(size=None):
-        globals()["__CHUNKS__"] = size
+        try:
+            assert type(size) == int
+            globals()["__CHUNKS__"] = size
+        except AssertionError:
+            globals()["__CHUNKS__"] = int(size)
 
     @staticmethod
     def get_chunksize():

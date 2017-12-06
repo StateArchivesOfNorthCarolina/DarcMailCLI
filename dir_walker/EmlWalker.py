@@ -92,10 +92,11 @@ class EmlWalker:
             self.total_messages_processed += 1
             self.chunks += 1
         except MemoryError as me:
-            print()
+            # TODO: Write to a file or error log with file_id or message id
+            raise MemoryError
 
     def _process_message(self, mes, path):
-        e_msg = DmMessage(self.get_rel_path(path), CommonMethods.increment_local_id(), mes)
+        e_msg = DmMessage(path, CommonMethods.increment_local_id(), mes)
         e_msg.message = None
         self.messages.append(e_msg)
 
@@ -104,8 +105,10 @@ class EmlWalker:
             return "."
         common = os.path.commonpath([self.account_directory, path])
         rel = os.path.basename(path)
-        diff = len(self.account_directory.split(os.path.sep)) - len(path.split(os.path.sep))
-        return os.path.join('.', path.split(os.path.sep)[diff])
+        start = len(self.account_directory.split(os.path.sep))
+        end = len(path.split(os.path.sep))
+        group = path.split(os.path.sep)[start:end]
+        return os.path.join('.', os.path.sep.join(group))
 
     def _set_current_relpath(self, path):
         if path == self.current_folder:

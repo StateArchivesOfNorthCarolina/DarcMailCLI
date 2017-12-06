@@ -41,7 +41,8 @@ class ExtBodyContent:
         if self.xml_wrapped:
             try:
                 fn = '{}{}'.format(self.gid, '.xml')
-                self.rel_path = ".{}\{}".format(CommonMethods.get_rel_attachment_dir(), fn)
+                attach_dir = CommonMethods.get_rel_attachment_dir()
+                self.rel_path = ".{}".format(os.path.join(attach_dir, fn))
                 fh = codecs.open(os.path.join(self.attachment_directory, fn), "w", "utf-8")
                 fh.write(xml)
                 fh.close()
